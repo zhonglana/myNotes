@@ -1,0 +1,22 @@
+spring boot 
+validator 	https://www.cnblogs.com/mr-yang-localhost/p/7812038.html
+
+Arrays.stream(resources).forEach(Main4Resource::printResource);
+
+
+-- excel读取报格式问题
+InputStream templateStream = ClassUtils.getDefaultClassLoader().getResourceAsStream(TEMPLATE);
+ByteArrayOutputStream baos = new ByteArrayOutputStream();
+byte[] buffer = new byte[2048];
+int num = -1;
+while((num = templateStream.read(buffer)) != -1){
+　　baos.write(buffer, 0, num);
+}
+baos.flush();
+baos.toByteArray();
+baos.close();
+
+--
+spring boot 消息队列
+https://www.cnblogs.com/leeSmall/p/8721556.html
+

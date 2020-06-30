@@ -1,0 +1,90 @@
+10.0.148.84:28000
+10.0.148.85:28000
+10.0.148.86:28000
+
+admin -u admin -p 123456
+
+
+
+db.resume.aggregate([
+	{$group : {_id : "$resumeId", num : {$sum : 1}}},
+	{$match : { num : { $gt : 1} } },
+
+])
+
+db.resumeId.aggregate([
+	
+	{$skip :  1400000},
+	{$limit : 100000},
+	{$group : {_id : "$resumeId", num : {$sum : 1}}},
+	{$match : { num :  {$gt  : 1}}},
+	{$group : {_id : null, num : {$sum : 1}}},
+])
+
+
+===========
+
+db.resumeId.aggregate([
+//	{$sort : {id:1}},
+	{$skip :  000000},
+	{$limit : 500000},
+//	{$match : { resumeId :  {$eq  : "41452326"}}},
+	{$group : {_id : "$resumeId", num : {$sum : 1},dups: {$addToSet: '$_id'}}},
+	{$match : { num :  {$gt  : 1}}},
+//	{$group : {_id : null, num : {$sum : 1}}},
+])
+//.forEach(function(doc){
+//    doc.dups.shift();
+//    db.resumeId.remove({_id: {$in: doc.dups}});
+//})
+
+========
+
+## 获取重复数据，排除第一个，把剩下的插入到集合中 resumeId_replace
+
+db.resumeId.aggregate([
+	
+//	{$sort : {id:1}},
+//	{$skip :  500000},
+//	{$limit : 500000},
+//	{$match : { resumeId :  {$eq  : "118388686"}}},
+	{$group : {_id : "$resumeId", num : {$sum : 1},dups: {$addToSet: '$_id'}}},
+	{$match : { num :  {$gt  : 1}}},
+//	{$group : {_id : null, num : {$sum : 1}}},
+],{allowDiskUse : true })
+.forEach(function(doc){
+  	doc.dups.shift();
+  	
+  	for(var i=0;i<doc.dups.length;i++){
+  	  db.resumeId_replace.insert( {"de_id" : doc.dups[i]});
+  	}
+    
+})
+==============
+
+
+db.resumeId_replace.find({})
+.forEach(function(doc){
+  	db.resumeId.remove({_id: doc.de_id});
+})
+
+
+========================
+创建索引
+db.collection.createIndex(keys, options)
+db.col.createIndex({"title":1,"description":-1})
+db.values.createIndex({open: 1, close: 1}, {background: true})
+
+db.hana_employee.createIndex({pernr: 1}, {background: true})
+
+查询索引
+db.col.getIndexes()
+
+
+
+
+
+
+
+
+

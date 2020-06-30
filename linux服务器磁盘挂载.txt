@@ -1,0 +1,47 @@
+访问服务器静态文件需要容器
+1.tomcat 修改service.xml
+<host>
+..
+<Context docBase="/usr/lz/img" path="/img" debug="0" reloadable="true"  />
+</host>
+
+2.nginx
+
+
+
+
+-------------------------------------------------------------------------------------------
+假设源目录在192.168.1.1机器上，目录为/data
+客户端集群在192.168.1.2， 需要将192.168.1.1机器上的/data目录到本地的/data目录
+
+1、在两台机器上安装nsf 、 portmap
+#yum  install  nfs-utils  portmap  
+
+2、(磁盘源)在192.168.1.1机器上面修改/etc/exports文件，加入如下内容
+#vim /etc/exports
+/data/ 192.168.1.2 (insecure,rw,sync,no_root_squash)  
+
+表示开放本机器上面/data目录， 主机192.168.1.2对该目录拥有rw权限。其他参数可以去查看nsf文档
+
+然后启用nsf与portmap服务
+#service rpcbind start  
+#service nfs start   
+
+
+3、在192.168.1.2机器上面启动nsf与portmap服务然后挂载remote目录
+#service rpcbind start  
+#service nfs start   
+#mount -t nfs 192.168.1.2:/lexuetes/  /lexuetes/ 
+
+
+将机器192.168.1.1上面的/data目录挂在到本机的/data目录下面
+现在就可以在192.168.1.2机器上面对/data目录进行读改操作了
+
+---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+

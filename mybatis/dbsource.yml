@@ -1,0 +1,9 @@
+
+custom:
+  datasource:
+    clusters:
+    - name: dbname
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://ip:3306/dbname?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true&useSSL=false
+      username: 
+      password: 

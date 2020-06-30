@@ -1,0 +1,25 @@
+FROM docker.io/centos
+MAINTAINER v-lanz
+RUN mkdir /app/spring_boot/ -p
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+ADD /jdk/* /app/
+ADD publish.sh /app/
+ADD simsun.ttc /app/jdk1.8.0_171/jre/lib/fonts/
+ENV JAVA_HOME /app/jdk1.8.0_171
+ENV JRE_HOME $JAVA_HOME/jre
+ENV CLASSPATH :$JAVA_HOME/lib:$JRE_HOME/lib
+ENV PATH $PATH:$JAVA_HOME/bin
+ENV LANG en_US.UTF-8
+
+ENTRYPOINT ["/app/publish.sh"]
+
+
+### publish.sh 内容如下:
+### nohup java -Djava.security.egd=file:/dev/./urandom -jar /app/spring_boot/*.jar > /app/spring_boot/access.log
+
+
+
+######################################
+FROM 552f6d00092c
+MAINTAINER v-lanz
+RUN yum install telnet -y

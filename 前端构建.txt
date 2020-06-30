@@ -1,0 +1,13 @@
+1.安装node.js  8.1版本
+#curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+
+2.安装cnpm 
+#npm i -g cnpm
+
+#缓存 node_modulos
+
+3.
+#cnpm i
+
+4.build
+#cnpm run build

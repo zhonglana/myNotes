@@ -1,0 +1,26 @@
+
+sudo docker run -it --name redis-master -d -p 8020:8020 redis redis-server --port 8020
+
+sudo docker run -it --name redis-sentinel-1 -v /app/redis/sentinel_26379.conf:/app/redis/sentinel.conf -d -p 26379:26379 redis /bin/bash
+
+sudo docker run -it --name redis-sentinel-1 -v /app/redis/conf/sentinel_26379.conf:/app/redis/sentinel.conf -d -p 26379:26379 redis /bin/bash
+sudo docker run -it --name redis-sentinel-2 -v /app/redis/conf/sentinel_26380.conf:/app/redis/sentinel.conf -d -p 26380:26380 redis /bin/bash
+sudo docker run -it --name redis-sentinel-3 -v /app/redis/conf/sentinel_26381.conf:/app/redis/sentinel.conf -d -p 26381:26381 redis /bin/bash
+
+
+
+
+sudo docker exec -it redis-sentinel-1 /bin/bash
+
+redis-sentinel /app/redis/sentinel.conf
+
+redis-cli -p 26379
+sentinel master mymaster
+
+slaveof ip 8020
+slaveof no one
+
+
+#docker redis sentinel
+#https://blog.csdn.net/qq_28804275/article/details/80938659
+
