@@ -1,6 +1,11 @@
-10.0.148.84:28000
-10.0.148.85:28000
-10.0.148.86:28000
+#备份数据
+/root/sunxu/mongo/bin/mongodump -h 10.24.0.15 --port 27017 -u mongouser -p fca@2018 --authenticationDatabase=admin --authenticationMechanism=SCRAM-SHA-1 -d iov-notification-record  -o ./
+
+#导入数据
+/root/mongo/bin/mongorestore -h 10.129.0.12 --port 27017 -u mongouser -p fca@2018 --authenticationDatabase=admin --authenticationMechanism=SCRAM-SHA-1 -d alfa_database_mno  --dir ./alfa_database_mno
+
+#导出数据
+/root/mongodb-linux-x86_64-rhel70-3.4.17/bin/./mongoexport -h 10.1.0.8 -u mongouser -pfca@2018 --authenticationDatabase=admin --authenticationMechanism=SCRAM-SHA-1 --port 27017 -d database_phev -c t_phev_command --type=csv -f vin,platformResponseId,status,requestTime,responseBody -q '{"status":"ONGOING",requestTime:{$gt:1591401600000,$lt:1592438400000}}' -o /root/phev06-18.csv
 
 admin -u admin -p 123456
 
