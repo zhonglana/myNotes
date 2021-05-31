@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/ -->
+<html lang="en-US" class=" whatinput-types-initial whatinput-types-mouse whatinput-types-keyboard" data-whatinput="mouse" data-whatintent="mouse"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/f.txt"></script><script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/collectedforms.js.下载" type="text/javascript" id="CollectedForms-6435916" crossorigin="anonymous" data-leadin-portal-id="6435916" data-leadin-env="prod" data-loader="hs-scriptloader" data-hsjs-portal="6435916" data-hsjs-env="prod" data-hsjs-hublet="na1"></script><script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/6435916.js.下载" type="text/javascript" id="hs-analytics"></script><script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/6435916.js(1).下载" type="text/javascript" id="cookieBanner-6435916" data-cookieconsent="ignore" data-hs-ignore="true" data-loader="hs-scriptloader" data-hsjs-portal="6435916" data-hsjs-env="prod" data-hsjs-hublet="na1"></script><script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/fb.js.下载" type="text/javascript" id="hs-ads-pixel-6435916" data-ads-portal-id="6435916" data-ads-env="prod" data-loader="hs-scriptloader" data-hsjs-portal="6435916" data-hsjs-env="prod" data-hsjs-hublet="na1"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/plv17rv3"></script><script src="https://connect.facebook.net/signals/config/1764061803863673?v=2.9.40&amp;r=stable" async=""></script><script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/insight.min.js.下载"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/f.txt"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/analytics.js.下载"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/js"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/analytics.js.下载"></script><script type="text/javascript" async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/hotjar-1592743.js.下载"></script><script async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/gtm.js.下载"></script><script async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/analytics.js.下载"></script><script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+</script>
+
+
+<style>.async-hide { opacity: 0 !important} </style>
+<script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+(a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+})(window,document.documentElement,'async-hide','dataLayer',4000,
+{'GTM-MPT264':true});</script> 
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<link rel="shortcut icon" href="https://upcloud.com/wp-content/themes/upcloud/favicon.png">
+<link rel="stylesheet" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+<link rel="stylesheet" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/slick.css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+<link rel="stylesheet" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/aos.css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+<link rel="stylesheet" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/highlight.css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+<link rel="stylesheet" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/tooltipster.bundle.min.css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			Array.prototype.slice.call(document.querySelectorAll("pre code")).forEach(function(block) {
+				hljs.highlightBlock(block);
+			});
+		});
+	</script>
+
+<script data-cfasync="false" data-pagespeed-no-defer="" type="text/javascript">//<![CDATA[
+	var gtm4wp_datalayer_name = "dataLayer";
+	var dataLayer = dataLayer || [];
+//]]>
+</script>
+
+
+<title>Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud</title>
+<meta name="description" content="Shadowsocks-libev is a lighter and faster open-source port of the Shadowsocks SOCKS5 proxy ideal to protect privacy on the Internet.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel="canonical" href="https://upcloud.com/community//tutorials/install-shadowsocks-libev-socks5-proxy/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to install Shadowsocks-libev SOCKS5 proxy server">
+<meta property="og:description" content="Shadowsocks-libev is a lighter and faster open-source port of the Shadowsocks SOCKS5 proxy ideal to protect privacy on the Internet. Check out how to install Shadowsocks-libev on a cloud server.">
+<meta property="og:url" content="https://upcloud.com/community/
+/tutorials/install-shadowsocks-libev-socks5-proxy/">
+<meta property="og:site_name" content="UpCloud">
+<meta property="article:publisher" content="https://facebook.com/upcloudltd">
+<meta property="article:modified_time" content="2020-11-06T10:59:04+00:00">
+<meta property="og:image" content="https://upcloud.com/wp-content/uploads/2020/08/shadowsocks-libev-twitter.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to install Shadowsocks-libev SOCKS5 proxy server">
+<meta name="twitter:description" content="Shadowsocks-libev is a lighter and faster open-source port of the Shadowsocks SOCKS5 proxy ideal to protect privacy on the Internet. Check out how to install Shadowsocks-libev on a cloud server.">
+<meta name="twitter:image" content="https://upcloud.com/wp-content/uploads/2020/08/shadowsocks-libev-twitter.png">
+<meta name="twitter:site" content="@UpCloud">
+<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://upcloud.com/#organization","name":"UpCloud","url":"https://upcloud.com/","sameAs":["https://facebook.com/upcloudltd","https://www.instagram.com/upcloud/","https://www.linkedin.com/company/upcloud/","https://www.youtube.com/channel/UCkIkxF5pBTBLYgYHXDIUUuw","https://twitter.com/UpCloud"],"logo":{"@type":"ImageObject","@id":"https://upcloud.com/#logo","inLanguage":"en-US","url":"https://upcloud.com/wp-content/uploads/2018/11/upcloud_logo_horizontal.svg","caption":"UpCloud"},"image":{"@id":"https://upcloud.com/#logo"}},{"@type":"WebSite","@id":"https://upcloud.com/#website","url":"https://upcloud.com/","name":"UpCloud","description":"World&#039;s fastest cloud servers","publisher":{"@id":"https://upcloud.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":"https://upcloud.com/?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"en-US"},{"@type":["WebPage","ItemPage"],"@id":"https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/#webpage","url":"https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/","name":"Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud","isPartOf":{"@id":"https://upcloud.com/#website"},"datePublished":"2020-08-30T13:55:37+00:00","dateModified":"2020-11-06T10:59:04+00:00","description":"Shadowsocks-libev is a lighter and faster open-source port of the Shadowsocks SOCKS5 proxy ideal to protect privacy on the Internet.","inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/"]}]},{"@type":["Article","TechArticle"],"@id":"https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/#article","isPartOf":{"@id":"https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/#webpage"},"author":{"@id":"https://upcloud.com/#/schema/person/14c674ca4fb5d0969c884fb555d47700"},"headline":"How to install Shadowsocks-libev SOCKS5 proxy server","datePublished":"2020-08-30T13:55:37+00:00","dateModified":"2020-11-06T10:59:04+00:00","mainEntityOfPage":{"@id":"https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/#webpage"},"commentCount":17,"publisher":{"@id":"https://upcloud.com/#organization"},"inLanguage":"en-US","potentialAction":[{"@type":"CommentAction","name":"Comment","target":["https://upcloud.com/community/\r/tutorials/install-shadowsocks-libev-socks5-proxy/#respond"]}]},{"@type":"Person","@id":"https://upcloud.com/#/schema/person/14c674ca4fb5d0969c884fb555d47700","name":"Zachariah George","image":{"@type":"ImageObject","@id":"https://upcloud.com/#personlogo","inLanguage":"en-US","url":"https://secure.gravatar.com/avatar/e71c862c596d3e6d8457ff67a5aeb5d9?s=96&d=mm&r=g","caption":"Zachariah George"}}]}</script>
+
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="UpCloud » Feed" href="https://upcloud.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="UpCloud » Comments Feed" href="https://upcloud.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="UpCloud » How to install Shadowsocks-libev SOCKS5 proxy server Comments Feed" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/feed/">
+<link rel="stylesheet" id="sb_instagram_styles-css" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/sbi-styles.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="legacy-style-css" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/legacy.css" type="text/css" media="all">
+<link rel="stylesheet" id="googlefonts-css" href="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/css(1)" type="text/css" media="all">
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/jquery.min.js.下载" id="jquery-core-js"></script>
+<link rel="https://api.w.org/" href="https://upcloud.com/wp-json/"><link rel="alternate" type="application/json" href="https://upcloud.com/wp-json/wp/v2/tutorials/16324"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://upcloud.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://upcloud.com/wp-includes/wlwmanifest.xml">
+<meta name="generator" content="WordPress 5.6.2">
+<link rel="shortlink" href="https://upcloud.com/?p=16324">
+<link rel="alternate" type="application/json+oembed" href="https://upcloud.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fupcloud.com%2Fcommunity%2Ftutorials%2Finstall-shadowsocks-libev-socks5-proxy%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://upcloud.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fupcloud.com%2Fcommunity%2Ftutorials%2Finstall-shadowsocks-libev-socks5-proxy%2F&amp;format=xml">
+
+<script data-cfasync="false" data-pagespeed-no-defer="" type="text/javascript">//<![CDATA[
+	var dataLayer_content = {"visitorLoginState":"logged-out","visitorType":"visitor-logged-out","visitorRegistrationDate":"","visitorUsername":"","visitorIP":"18.167.19.50","pageTitle":"Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud","pagePostType":"tutorials","pagePostType2":"single-tutorials","pagePostAuthorID":70,"pagePostAuthor":"Zachariah George","pagePostDate":"2020-08-30","pagePostDateYear":"2020","pagePostDateMonth":"08","pagePostDateDay":"30","pagePostTerms":{"tutorials_category":["Integrations"]},"postCountOnPage":1,"postCountTotal":1,"postID":16324,"postFormat":"standard"};
+	dataLayer.push( dataLayer_content );//]]>
+</script>
+<script data-cfasync="false">//<![CDATA[
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.'+'js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MPT264');//]]>
+</script>
+
+
+<script type="text/javascript">
+            var jQueryMigrateHelperHasSentDowngrade = false;
+
+			window.onerror = function( msg, url, line, col, error ) {
+				// Break out early, do not processing if a downgrade reqeust was already sent.
+				if ( jQueryMigrateHelperHasSentDowngrade ) {
+					return true;
+                }
+
+				var xhr = new XMLHttpRequest();
+				var nonce = 'eeecd14b2b';
+				var jQueryFunctions = [
+					'andSelf',
+					'browser',
+					'live',
+					'boxModel',
+					'support.boxModel',
+					'size',
+					'swap',
+					'clean',
+					'sub',
+                ];
+				var match_pattern = /\)\.(.+?) is not a function/;
+                var erroredFunction = msg.match( match_pattern );
+
+                // If there was no matching functions, do not try to downgrade.
+                if ( typeof erroredFunction !== 'object' || typeof erroredFunction[1] === "undefined" || -1 === jQueryFunctions.indexOf( erroredFunction[1] ) ) {
+                    return true;
+                }
+
+                // Set that we've now attempted a downgrade request.
+                jQueryMigrateHelperHasSentDowngrade = true;
+
+				xhr.open( 'POST', 'https://upcloud.com/wp-admin/admin-ajax.php' );
+				xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+				xhr.onload = function () {
+					var response,
+                        reload = false;
+
+					if ( 200 === xhr.status ) {
+                        try {
+                        	response = JSON.parse( xhr.response );
+
+                        	reload = response.data.reload;
+                        } catch ( e ) {
+                        	reload = false;
+                        }
+                    }
+
+					// Automatically reload the page if a deprecation caused an automatic downgrade, ensure visitors get the best possible experience.
+					if ( reload ) {
+						location.reload();
+                    }
+				};
+
+				xhr.send( encodeURI( 'action=jquery-migrate-downgrade-version&_wpnonce=' + nonce ) );
+
+				// Suppress error alerts in older browsers
+				return true;
+			}
+        </script>
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><link rel="icon" href="https://upcloud.com/wp-content/uploads/2018/11/cropped-upcloud_icon_purple-32x32.png" sizes="32x32">
+<link rel="icon" href="https://upcloud.com/wp-content/uploads/2018/11/cropped-upcloud_icon_purple-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://upcloud.com/wp-content/uploads/2018/11/cropped-upcloud_icon_purple-180x180.png">
+<meta name="msapplication-TileImage" content="https://upcloud.com/wp-content/uploads/2018/11/cropped-upcloud_icon_purple-270x270.png">
+<script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/f(1).txt"></script><script async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/modules.5a9f57d95ecbb1bf1965.js.下载" charset="utf-8"></script><style type="text/css">iframe#_hjRemoteVarsFrame {display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;}</style><meta class="foundation-mq"><script async="" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/js(1)"></script><script src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/f(2).txt"></script></head>
+<body class="tutorials-template-default single single-tutorials postid-16324 wp-custom-logo header-gap" data-aos-easing="ease" data-aos-duration="400" data-aos-delay="0">
+<style>
+#contribute-faq { display: none; }
+</style> <div class="site-wrap theme-red">
+<header class="l-site-header js-header headroom headroom--not-bottom headroom--not-top headroom--unpinned">
+<div class="l-site-header__global">
+<div class="l-global-site-header">
+<div class="l-global-site-header__container">
+<div class="l-global-site-header__message"></div>
+<div class="l-global-site-header__tools">
+<div class="l-global-site-header__language-switcher">
+<nav>
+<div class="c-top-header-navigation"><ul id="menu-top-header-navigation" class="c-top-header-navigation__list"><li id="menu-item-20105" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20105"><a href="https://upcloud.com/docs/">Documentation</a></li>
+<li id="menu-item-15871" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15871"><a href="https://developers.upcloud.com/">API</a></li>
+<li id="menu-item-15869" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15869"><a href="https://upcloud.com/faq/">FAQ</a></li>
+<li id="menu-item-20025" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20025"><a href="https://upcloud.com/contact/">Contact Sales</a></li>
+</ul></div> </nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="l-site-header__bar">
+<div class="l-site-header__container">
+<div class="l-navigation-bar">
+<a href="https://upcloud.com/" class="l-navigation-bar__logo">
+
+<svg width="208px" height="33px" viewBox="0 0 208 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>UpCloud Brand Guide-0</title>
+<desc>Created with Sketch.</desc>
+<defs></defs>
+<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+<g id="Startpage" transform="translate(-20.000000, -26.000000)" fill-rule="nonzero">
+<g id="Introduction-Header" transform="translate(-138.000000, -2.000000)">
+<g id="Main-menu" transform="translate(138.000000, 0.000000)">
+<g id="UpCloud-Brand-Guide-0" transform="translate(20.000000, 28.000000)">
+<path d="M90.8238193,17.6917973 C90.8238193,22.0506459 88.3893224,23.9095666 84.3531828,23.9095666 C80.1462012,23.9095666 77.6689938,22.0506459 77.6689938,17.6917973 L77.6689938,0.726474767 L74.4657084,0.726474767 L74.4657084,18.0123008 C74.4657084,24.1873363 78.6726899,26.6658973 84.2464066,26.6658973 C89.713347,26.6658973 94.0271047,24.2087033 94.0271047,18.0123008 L94.0271047,0.726474767 L90.8238193,0.726474767 L90.8238193,17.6917973 Z M107.673101,7.37158219 C105.003696,7.37158219 103.145791,8.52539506 101.736345,10.4056827 L101.672279,10.4056827 L101.672279,7.79892029 L98.7893224,7.79892029 L98.7893224,32.1999257 L101.672279,32.1999257 L101.672279,24.0805018 L101.736345,24.0805018 C103.273922,26.0462571 105.067762,26.7940987 107.566324,26.7940987 C112.56345,26.7940987 115.595893,23.0121566 115.595893,17.072157 C115.595893,10.9398553 112.349897,7.37158219 107.673101,7.37158219 Z M107.352772,24.3796385 C103.10308,24.3796385 101.501437,21.1318689 101.501437,17.1362577 C101.501437,13.1406465 103.359343,9.82877626 107.395483,9.82877626 C110.897741,9.82877626 112.648871,12.9697113 112.648871,17.1148908 C112.648871,21.3028042 110.897741,24.3796385 107.352772,24.3796385 Z M130.758111,23.9523004 C125.440657,23.9523004 121.981109,19.7430201 121.981109,13.482517 C121.981109,7.47841672 125.120329,2.94863288 130.736756,2.94863288 C134.772895,2.94863288 137.314168,5.12805718 137.912115,8.31172601 L141.051335,8.31172601 C140.367967,3.58964002 136.758932,0.170935239 130.800821,0.170935239 C123.198357,0.170935239 118.692402,6.00410028 118.692402,13.5038839 C118.692402,21.2600704 123.41191,26.7940987 130.651335,26.7940987 C133.897331,26.7940987 136.502669,25.8753218 138.296509,24.1232356 C140.111704,22.3284156 141.328953,19.4866173 141.371663,16.9439556 L138.189733,16.9439556 C137.869405,20.661797 135.584394,23.9523004 130.758111,23.9523004 Z M145.194251,0.726474767 L148.077207,0.726474767 L148.077207,26.281293 L145.194251,26.281293 L145.194251,0.726474767 Z M160.505955,7.32884838 C154.996304,7.32884838 151.579466,11.687697 151.579466,17.0507901 C151.579466,22.4138832 155.017659,26.7727318 160.505955,26.7727318 C166.036961,26.7727318 169.389733,22.4138832 169.389733,17.0507901 C169.389733,11.687697 166.036961,7.32884838 160.505955,7.32884838 Z M160.505955,24.3369047 C156.576591,24.3369047 154.547844,21.1318689 154.547844,17.0507901 C154.547844,12.9697113 156.576591,9.72194173 160.505955,9.72194173 C164.435318,9.72194173 166.44271,12.9697113 166.44271,17.0507901 C166.44271,21.1318689 164.435318,24.3369047 160.505955,24.3369047 Z M184.594661,19.1661137 C184.594661,22.0933797 182.694045,24.3155378 179.768378,24.3155378 C177.163039,24.3155378 175.625462,22.926689 175.625462,20.5335956 L175.625462,7.79892029 L172.742505,7.79892029 L172.742505,20.5976963 C172.742505,24.4223723 175.177002,26.7086311 178.956879,26.7086311 C181.626283,26.7086311 183.206571,25.5334514 184.530595,23.7386313 L184.594661,23.7386313 L184.594661,26.281293 L187.498973,26.281293 L187.498973,7.79892029 L184.616016,7.79892029 L184.616016,19.1661137 L184.594661,19.1661137 Z M204.967556,0.726474767 L204.967556,10.4056827 L204.903491,10.4056827 C203.728953,8.65359649 201.721561,7.37158219 199.116222,7.37158219 C194.546201,7.37158219 191.001232,10.9398553 191.001232,17.0935239 C191.001232,23.0335235 194.140452,26.8154657 199.180287,26.8154657 C201.785626,26.8154657 203.494045,25.8112211 204.903491,24.037768 L204.967556,24.037768 L204.967556,26.281293 L207.850513,26.281293 L207.850513,0.726474767 L204.967556,0.726474767 Z M199.287064,24.3796385 C195.742094,24.3796385 193.96961,21.3028042 193.96961,17.1362577 C193.96961,12.9910782 195.76345,9.85014316 199.244353,9.85014316 C203.06694,9.85014316 205.138398,12.8415098 205.138398,17.1362577 C205.138398,21.3028042 203.408624,24.3796385 199.287064,24.3796385 Z" id="Shape" fill="#FFFFFF"></path>
+<g id="logo-cables" transform="translate(0.000000, 0.641007)" fill="#7B00FF">
+<path d="M59.324846,15.5764737 L28.0607803,15.5764737 L28.0607803,17.9268332 L59.3462012,17.9268332 C60.8410678,17.9268332 62.036961,19.1233799 62.036961,20.6190632 C62.036961,22.1147466 60.8410678,23.3112932 59.3462012,23.3112932 L25.6903491,23.3112932 L25.6903491,12.5423732 L23.3412731,12.5423732 L23.3412731,25.6616528 L59.324846,25.6616528 C62.1010267,25.6616528 64.3646817,23.3967609 64.3646817,20.6190632 C64.3646817,17.8413656 62.1010267,15.5764737 59.324846,15.5764737 Z" id="Shape"></path>
+<path d="M2.49856263,12.8842437 C2.49856263,11.3885603 3.69445585,10.1920136 5.18932238,10.1920136 L36.1330595,10.1920136 C38.9092402,10.1920136 41.1728953,7.92712172 41.1728953,5.14942408 C41.1728953,2.37172644 38.9092402,0.106834525 36.1330595,0.106834525 L23.3626283,0.106834525 L23.3626283,5.49129456 L25.7117043,5.49129456 L25.7117043,2.45719406 L36.1330595,2.45719406 C37.6279261,2.45719406 38.8238193,3.65374074 38.8238193,5.14942408 C38.8238193,6.64510742 37.6279261,7.8416541 36.1330595,7.8416541 L5.18932238,7.8416541 C2.41314168,7.8416541 0.149486653,10.106546 0.149486653,12.8842437 C0.149486653,15.6619413 2.39178645,17.9482001 5.18932238,17.9482001 L20.9921971,17.9482001 L20.9921971,15.5978406 L5.18932238,15.5978406 C3.69445585,15.5764737 2.49856263,14.379927 2.49856263,12.8842437 Z" id="Shape"></path>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
+</a>
+<div class="l-navigation-bar__menu">
+<nav>
+<div class="c-header-menu-desktop"><ul id="menu-header-navigation" class="c-header-menu-desktop__list"><li id="menu-item-15852" class="has-groups has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15852"><a href="https://upcloud.com/products/">Products</a>
+<ul class="sub-menu">
+<li id="menu-item-15860" class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15860"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Compute</a>
+<ul class="sub-menu">
+<li id="menu-item-15853" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15853"><a href="https://upcloud.com/products/cloud-servers/">Cloud Servers</a></li>
+<li id="menu-item-15857" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15857"><a href="https://upcloud.com/products/private-cloud/">Private Cloud</a></li>
+</ul>
+</li>
+<li id="menu-item-15861" class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15861"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Storage</a>
+<ul class="sub-menu">
+<li id="menu-item-15854" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15854"><a href="https://upcloud.com/products/maxiops-storage/">MaxIOPS</a></li>
+<li id="menu-item-17835" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17835"><a href="https://upcloud.com/products/object-storage/">Object Storage</a></li>
+<li id="menu-item-15855" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15855"><a href="https://upcloud.com/products/backup/">Simple Backup</a></li>
+</ul>
+</li>
+<li id="menu-item-15862" class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15862"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Networking</a>
+<ul class="sub-menu">
+<li id="menu-item-15856" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15856"><a href="https://upcloud.com/products/software-defined-networking/">SDN Private Networks</a></li>
+<li id="menu-item-19150" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19150"><a href="https://upcloud.com/products/network-transfer-pool/">Network Transfer Pool</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li id="menu-item-15851" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15851"><a href="https://upcloud.com/pricing/">Pricing</a></li>
+<li id="menu-item-15844" class="has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15844"><a href="https://upcloud.com/compare/">Compare</a>
+<ul class="sub-menu">
+<li id="menu-item-15845" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15845"><a href="https://upcloud.com/compare/aws-ec2/">AWS EC2</a></li>
+<li id="menu-item-15846" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15846"><a href="https://upcloud.com/compare/azure/">Microsoft Azure</a></li>
+<li id="menu-item-15847" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15847"><a href="https://upcloud.com/compare/digitalocean/">DigitalOcean</a></li>
+<li id="menu-item-15848" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15848"><a href="https://upcloud.com/compare/linode/">Linode</a></li>
+<li id="menu-item-15849" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15849"><a href="https://upcloud.com/compare/vultr/">Vultr</a></li>
+</ul>
+</li>
+<li id="menu-item-15842" class="has-groups has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15842"><a href="https://upcloud.com/community/">Resources</a>
+<ul class="sub-menu">
+<li id="menu-item-15858" class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15858"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Community</a>
+<ul class="sub-menu">
+<li id="menu-item-17472" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17472"><a href="https://upcloud.com/community//">Overview</a></li>
+<li id="menu-item-15872" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15872"><a href="https://upcloud.com/community//stories/">Use cases</a></li>
+<li id="menu-item-15873" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15873"><a href="https://upcloud.com/community//events/">Events</a></li>
+</ul>
+</li>
+<li id="menu-item-15859" class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15859"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Resources</a>
+<ul class="sub-menu">
+<li id="menu-item-15877" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15877"><a href="https://upcloud.com/community//tutorials/">Tutorials</a></li>
+<li id="menu-item-15878" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15878"><a href="https://upcloud.com/community//resources/">Resources</a></li>
+<li id="menu-item-15875" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15875"><a href="https://upcloud.com/docs">Documentation</a></li>
+<li id="menu-item-19869" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19869"><a href="https://upcloud.com/data-centres/">Data centres</a></li>
+<li id="menu-item-15850" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15850"><a href="https://upcloud.com/faq/">FAQ</a></li>
+<li id="menu-item-15876" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15876"><a href="https://developers.upcloud.com/">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li id="menu-item-17279" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17279"><a href="https://upcloud.com/partners/">Partners</a></li>
+<li id="menu-item-15863" class="has-toggle menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15863"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Company</a>
+<ul class="sub-menu">
+<li id="menu-item-15864" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15864"><a href="https://upcloud.com/about/">About us</a></li>
+<li id="menu-item-15874" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15874"><a href="https://upcloud.com/blog//">Blog</a></li>
+<li id="menu-item-15866" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15866"><a href="https://upcloud.com/careers/">Careers</a></li>
+<li id="menu-item-19673" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19673"><a href="https://upcloud.com/media-centre/">Media Centre</a></li>
+<li id="menu-item-20022" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20022"><a href="https://upcloud.com/contact/">Contact us</a></li>
+</ul>
+</li>
+</ul></div> </nav>
+</div>
+<div class="l-navigation-bar__buttons">
+<a href="https://hub.upcloud.com/" class="c-button c-button--login"><span></span> Log in</a>
+<a href="https://upcloud.com/signup/" class="c-button c-button--signup"><span></span> Sign up</a>
+</div>
+<div class="l-navigation-bar__menu-toggle">
+<div class="c-menu-toggle js-header-toggle" role="button">
+<div class="c-menu-toggle__icon">
+<div></div>
+<div></div>
+<div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="l-site-header__mobile-navigation">
+<div class="l-mobile-navigation">
+<div class="l-mobile-navigation__menu">
+<nav>
+<div class="c-header-menu-mobile js-mobile-menu"><ul id="menu-header-navigation-1" class="c-header-menu-mobile__list"><li class="has-groups has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15852"><a href="https://upcloud.com/products/">Products</a>
+<ul class="sub-menu">
+<li class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15860"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Compute</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15853"><a href="https://upcloud.com/products/cloud-servers/">Cloud Servers</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15857"><a href="https://upcloud.com/products/private-cloud/">Private Cloud</a></li>
+</ul>
+</li>
+<li class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15861"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Storage</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15854"><a href="https://upcloud.com/products/maxiops-storage/">MaxIOPS</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17835"><a href="https://upcloud.com/products/object-storage/">Object Storage</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15855"><a href="https://upcloud.com/products/backup/">Simple Backup</a></li>
+</ul>
+</li>
+<li class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15862"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Networking</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15856"><a href="https://upcloud.com/products/software-defined-networking/">SDN Private Networks</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19150"><a href="https://upcloud.com/products/network-transfer-pool/">Network Transfer Pool</a></li>
+</ul>
+</li>
+</ul>
+<span class="c-mobile-submenu-toggler"></span></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15851"><a href="https://upcloud.com/pricing/">Pricing</a></li>
+<li class="has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15844"><a href="https://upcloud.com/compare/">Compare</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15845"><a href="https://upcloud.com/compare/aws-ec2/">AWS EC2</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15846"><a href="https://upcloud.com/compare/azure/">Microsoft Azure</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15847"><a href="https://upcloud.com/compare/digitalocean/">DigitalOcean</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15848"><a href="https://upcloud.com/compare/linode/">Linode</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15849"><a href="https://upcloud.com/compare/vultr/">Vultr</a></li>
+</ul>
+<span class="c-mobile-submenu-toggler"></span></li>
+<li class="has-groups has-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15842"><a href="https://upcloud.com/community/">Resources</a>
+<ul class="sub-menu">
+<li class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15858"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Community</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17472"><a href="https://upcloud.com/community//">Overview</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15872"><a href="https://upcloud.com/community//stories/">Use cases</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15873"><a href="https://upcloud.com/community//events/">Events</a></li>
+</ul>
+</li>
+<li class="group-title menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15859"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Resources</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15877"><a href="https://upcloud.com/community//tutorials/">Tutorials</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15878"><a href="https://upcloud.com/community//resources/">Resources</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15875"><a href="https://upcloud.com/docs">Documentation</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19869"><a href="https://upcloud.com/data-centres/">Data centres</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15850"><a href="https://upcloud.com/faq/">FAQ</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15876"><a href="https://developers.upcloud.com/">API</a></li>
+</ul>
+</li>
+</ul>
+<span class="c-mobile-submenu-toggler"></span></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17279"><a href="https://upcloud.com/partners/">Partners</a></li>
+<li class="has-toggle menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-15863"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Company</a>
+<ul class="sub-menu">
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15864"><a href="https://upcloud.com/about/">About us</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15874"><a href="https://upcloud.com/blog//">Blog</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15866"><a href="https://upcloud.com/careers/">Careers</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19673"><a href="https://upcloud.com/media-centre/">Media Centre</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20022"><a href="https://upcloud.com/contact/">Contact us</a></li>
+</ul>
+<span class="c-mobile-submenu-toggler"></span></li>
+</ul></div> </nav>
+<div class="l-mobile-navigation__buttons">
+<a href="https://hub.upcloud.com/" class="c-button c-button--full c-button--login"><span></span> Log in</a>
+<a href="https://upcloud.com/signup/" class="c-button c-button--full c-button--signup"><span></span> Sign up</a>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div id="site-content" class="l-site-content l-site-content--using-new-nav">
+<section id="post-breadcrumb">
+<div class="grid-container">
+<div class="grid-x grid-padding-x">
+<div class="medium-12 cell">
+<h4><span><a href="https://upcloud.com/community/tutorials/">Tutorials</a></span><span class="icon arrow-simple"></span> <span>How to install Shadowsocks-libev SOCKS5 proxy server</span></h4>
+</div>
+</div>
+</div>
+</section>
+<section id="single-tutorial">
+<div class="grid-container">
+<div class="grid-x grid-padding-x">
+<div class="cell large-4">
+<div class="tutorial-index-wrap is_stuck" style="position: fixed; top: 120px; width: 349.984px;">
+<ul class="menu vertical tabs the-vertical-tabs" data-magellan="" data-threshold="200" data-animation-duration="100" data-resize="5i8k8u-magellan" data-scroll="5i8k8u-magellan" id="5i8k8u-magellan" data-e="22gfi9-e">
+<li class="sliding-border" style="height: 67px; transform: translateY(335px);"></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-1" class="">Installing Shadowsocks-libev</a></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-2" class="">Configuring proxy server</a></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-3" class="">Creating systemd service unit</a></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-4" class="">Allowing connection through firewall</a></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-5" class="">Connecting using proxy client</a></li>
+<li class="tabs-title"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#point-6" class="is-active">Making further optimisations</a></li>
+</ul>
+</div><div style="position: static; width: 349.984px; height: 402px; display: block; vertical-align: baseline; float: none;"></div>
+</div>
+<div class="cell large-8">
+<article id="post-16324" class="post-16324 tutorials type-tutorials status-publish hentry tutorials_category-integrations">
+<div class="tutorial-content-wrap">
+<div class="meta">
+
+</div>
+<h1>How to install Shadowsocks-libev SOCKS5 proxy server</h1>
+<div class="author-meta">
+<div class="author-image">
+<a href="https://upcloud.com/blog/author/zachariah-george/" rel="author">
+<img alt="" src="https://secure.gravatar.com/avatar/e71c862c596d3e6d8457ff67a5aeb5d9?s=60&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e71c862c596d3e6d8457ff67a5aeb5d9?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> </a>
+</div>
+<div class="author-name">
+<a href="https://upcloud.com/blog/author/zachariah-george/" rel="author">
+Zachariah George </a>
+</div>
+<div class="author-contributor">contributor</div>
+</div>
+<div class="post-meta">
+<a href="https://upcloud.com/tutorials-category/integrations/">
+<span class="tag">Integrations</span>
+</a>
+<span class="updated-on">Updated on <time datetime="2020-11-06">2020-11-06</time></span>
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comments"><span class="comments">17</span></a>
+</div>
+<div class="clearfix"></div>
+<div class="sections">
+<div id="" data-magellan-target="" class="tutorial-block">
+<p></p><p>Shadowsocks is a free open-source SOCKS5 proxy widely used to protect privacy on the Internet. Shadowsocks-libev, written in C, ports Shadowsocks to create a regularly maintained, <a href="https://github.com/shadowsocks/shadowsocks-libev" target="_blank" rel="nofollow noopener noreferrer">lighter and faster version of the original Shadowsocks</a>. The data passing through the Shadowsocks-server and Shadowsocks-client is encrypted and can be made indistinguishable from any other web traffic to avoid third-party monitoring.</p>
+<p>In this tutorial, we’ll show the steps for installing Shadowsocks-libev on a cloud server, configuring the proxy server, and using a client to connect to the proxy. The instructions are given here for CentOS 8, Debian 10 and Ubuntu 20.04 but the process should be much the same on any operating system supported by <a href="https://snapcraft.io/docs/installing-snapd" target="_blank" rel="nofollow noopener noreferrer">Snap</a>.</p>
+<p><a class="button" href="https://upcloud.com/signup//">Test hosting on UpCloud!</a></p>
+<p></p>
+</div>
+<div id="point-1" data-magellan-target="point-1" class="tutorial-block">
+<h2>Installing Shadowsocks-libev</h2>
+<p></p><p>Shadowsocks-libev recommends using their Snap releases for an easy way to install the latest binaries.</p>
+<p>On <strong>CentOS 8</strong> servers you will need EPEL repository before you can install Snap. Add it using the following commands:</p>
+<pre>sudo dnf install -y epel-release
+sudo dnf update -y</pre>
+<p>Then install and enable Snap by running the next two commands:</p>
+<pre>sudo dnf install -y snapd
+sudo systemctl enable --now snapd.socket</pre>
+<p>For <strong>Debian 10</strong> and <strong>Ubuntu 20.04</strong> systems, first, update the server software and then install Snap with the commands below.</p>
+<pre>sudo apt update &amp;&amp; apt upgrade -y
+sudo apt install -y snapd</pre>
+<p>Before installing Shadowsocks-libev, you may wish to install <tt>haveged</tt> to improve randomness but this is optional.</p>
+<pre># CentOS 8
+sudo dnf install -y haveged
+# Debian 10 and Ubuntu 20.04
+sudo apt install -y haveged</pre>
+<p>Once you have Snap and the optional <em>haveged</em> installed, reboot the server before continuing.</p>
+<pre>sudo reboot</pre>
+<p>When your cloud server is up and running again, log back in over SSH. Then install Shadowsocks-libev proxy via Snap using the following command:</p>
+<pre>sudo snap install shadowsocks-libev</pre>
+<p>Once you’ve installed Shadowsocks-libev, continue to the next section about how to configure the proxy server.</p>
+<p></p>
+</div>
+<div id="point-2" data-magellan-target="point-2" class="tutorial-block">
+<h2>Configuring proxy server</h2>
+ <p></p><p>Snap will install Shadowsocks-libev for you but it’ll need a little help with the setup. Make a directory to hold your configuration files.</p>
+<pre>sudo mkdir -p /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev</pre>
+<p>Next, create a JSON file for Shadowsocks-libev configuration. It can be named anything. Here we are using simple <tt>config</tt> as the name.</p>
+<pre>sudo touch /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/config.json</pre>
+<p>Then edit the file and add the following configuration to the file.</p>
+<pre>sudo nano /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/config.json</pre>
+<pre>{
+   "server":["[::0]", "0.0.0.0"],
+   "mode":"tcp_and_udp",
+   "server_port":443,
+   "password":"your-secure-password",
+   "timeout":60,
+   "method":"chacha20-ietf-poly1305",
+   "nameserver":"1.1.1.1"
+}</pre>
+<p>Let’s go over each of the configuration parameteres and what they do.</p>
+<h3>Server</h3>
+<p>The example configuration uses the server definition values which accept any IP address, both IPv6 and IPv4:</p>
+<pre>"server":["::0", "0.0.0.0"],</pre>
+<p>Not binding to a specific address can be useful if you wish to create a template of the configuration or a custom image of your Shadowsock server. This way the configuration will work regardless of the public IP address.</p>
+<p>You can also use your public IPv6 and IPv4 addresses, for example:</p>
+<pre>"server":["2a04:3543:1000:2312:4631:c1ff:feb5:01f0", "95.123.198.234"],</pre>
+<p>If you have a domain name that resolves to your cloud server’s IP address, you can also use it to have the proxy only respond to a certain domain.</p>
+<pre>"server":"shadow.example.com",</pre>
+<h3>Mode</h3>
+<p>The different modes define the data communication protocol used by the proxy. There are three valid values for <tt>"mode":</tt></p>
+<p>1. <tt>"tcp_and_udp"</tt><br>
+2. <tt>"tcp_only"</tt><br>
+3. <tt>"udp_only"</tt></p>
+<p>Using both TCP and UDP allows the proxy to negotiate the best connection available at the time and should be fine. If your network has specific requirements or restrictions, you may need to select <em>tcp_only</em>.</p>
+<h3>Server port</h3>
+<p>Our example Shadowsocks config uses the port 443 but it can be set to any free port. If you’re not using HTTP (80) or HTTPS (443) ports by hosting a website on the same server, you should use either of these ports. Note that using a common port such as 80 or 443 can attract unauthorised connection attempts so make sure your password is secure.</p>
+<h3>Password</h3>
+<p>The server password is used to authenticate connections to the proxy. Make sure to select a secure password with adequate complexity and length.</p>
+<h3>Timeout</h3>
+<p>This is the socket <tt>timeout</tt> in seconds. The example value of 60 should be fine. However, if you installed Shadowsocks from backports you might need to set it higher but it’s suggested you keep it under 5 minutes, i.e. 300 seconds.</p>
+<h3>Method</h3>
+<p>The <tt>method</tt> refers to the encryption cipher used by the proxy to secure the communications. The cipher used in the example config is a modern and efficient option:</p>
+<pre>"method":"chacha20-ietf-poly1305"</pre>
+<p>You can choose other ciphers if you want. Another popular alternative is:</p>
+<pre>"method":"aes-256-gcm"</pre>
+<h3>Nameserver</h3>
+<p>Our example also includes a domain name server which is not strictly necessary. Without this parameter the proxy will use the DNS used by your cloud server. You can have Shadowsocks use your preferred DNS by setting the <tt>nameserver</tt> in your config file.</p>
+<p>For example, to use Google’s DNS, enter the following:</p>
+<pre>"nameserver":"8.8.8.8"</pre>
+<p>Or if you prefer Cloudflare’s DNS, use their IP address instead:</p>
+<pre>"nameserver":"1.1.1.1"</pre>
+<p>Once you are done editing the configuration, save the file <em>ctrl+o</em> and exit the editor <em>ctrl+x</em>.</p>
+<p></p>
+</div>
+<div id="point-3" data-magellan-target="point-3" class="tutorial-block">
+<h2>Creating systemd service unit</h2>
+<p></p><p>Shadowsocks-libev can be run manually in the terminal but this isn’t very practical in the long-term. Instead, create a systemd service unit file using the following command:</p>
+<pre>sudo touch /etc/systemd/system/shadowsocks-libev-server@.service</pre>
+<p>Next, open the newly created file for edit:</p>
+<pre>sudo nano /etc/systemd/system/shadowsocks-libev-server@.service</pre>
+<p>Then copy and paste the following content into the file:</p>
+<pre>[Unit]
+Description=Shadowsocks-Libev Custom Server Service for %I
+Documentation=man:ss-server(1)
+After=network-online.target
+    
+[Service]
+Type=simple
+ExecStart=/usr/bin/snap run shadowsocks-libev.ss-server -c /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/%i.json
+    
+[Install]
+WantedBy=multi-user.target</pre>
+<p>Afterwards, save the file and exit the editor.</p>
+<p>You can then enable the systemd service unit for your config file by running the following command. Note that the <tt>@config</tt> is used to select the configuration file, <tt>config.json</tt> in this case, but without the file format notation.</p>
+<pre>sudo systemctl enable --now shadowsocks-libev-server@config</pre>
+<p>Check that the server started up successfully by using the <em>status</em> command:</p>
+<pre>sudo systemctl status shadowsocks-libev-server@config</pre>
+<p>You should see Shadowsocks listening to the IP addresses, ports and protocols you defined in the configuration. In our example output below, you can see both TCP and UDP running on IPv4 and IPv6 addresses as set in the configuration step.</p>
+<pre>● shadowsocks-libev-server@config.service - Shadowsocks-Libev Custom Server Service for config
+     Loaded: loaded (/etc/systemd/system/shadowsocks-libev-server@.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2020-08-30 10:37:06 UTC; 3s ago
+       Docs: man:ss-server(1)
+   Main PID: 1229 (ss-server)
+      Tasks: 1 (limit: 1074)
+     Memory: 18.0M
+     CGroup: /system.slice/system-shadowsocks\x2dlibev\x2dserver.slice/shadowsocks-libev-server@config.service
+             └─1229 /snap/shadowsocks-libev/508/bin/ss-server -c /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/config.json
+
+Aug 30 10:37:06 shadowsocks.example.com systemd[1]: Started Shadowsocks-Libev Custom Server Service for config.
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: UDP relay enabled
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: initializing ciphers... chacha20-ietf-poly1305
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: using nameserver: 1.1.1.1
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: tcp server listening at [::0]:443
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: tcp server listening at 0.0.0.0:443
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: udp server listening at [::0]:443
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: udp server listening at 0.0.0.0:443
+Aug 30 10:37:07 shadowsocks.example.com snap[1229]:  2020-08-30 10:37:07 INFO: running from root user</pre>
+<p>With Shadowsocks-libev proxy server up and running, we are almost ready to start testing the connection. Before then, check the next part of the tutorial to configure your firewall to allow a connection.</p>
+<p></p>
+</div>
+<div id="point-4" data-magellan-target="point-4" class="tutorial-block">
+<h2>Allowing connection through firewall</h2>
+<p></p><p>If you are using a firewall like UFW or firewalld, make sure you open up the port used by <tt>server_port</tt>&nbsp;as set in the configuration file, port 443 in this example.</p>
+<pre># Ubuntu
+sudo ufw allow 443</pre>
+<pre># CentOS
+sudo firewall-cmd --add-service=https --permanent
+sudo firewall-cmd --reload</pre>
+<p>If you’re not using a software firewall on your server we recommend enabling the UpCloud’s Firewall service on your cloud server.</p>
+<p>Check out the tutorial for <a href="https://upcloud.com/community//tutorials/managing-firewall/" target="_blank" rel="nofollow noopener noreferrer">managing UpCloud Firewall</a> to find out more.</p>
+<p></p>
+</div>
+<div id="point-5" data-magellan-target="point-5" class="tutorial-block">
+<h2>Connecting using proxy client</h2>
+<p></p><p>Shadowsocks-libev is now ready for proxy connections. To be able to connect to your Shadowsocks proxy server, you’ll need a client.</p>
+<h3>Client software</h3>
+<p>Shadowsocks is supported by a number of different clients and devices. You can find the list of available clients for your devices at the <a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="nofollow noopener noreferrer">Shadowsocks download page</a>.</p>
+<p>Install a client of your choosing and test out the connection with the help of the details below.</p>
+<p>For example, you can use the same Shadowsocks-libev software in client mode by installing it on your local system. Follow the installation steps like when installing the Shadowsocks-libev server then continue in the Linux client configuration step underneath.</p>
+<h3>Configuring mobile devices</h3>
+<p>As a light-weight proxy, Shadowsocks-libev works great with mobile devices. If you want a quick way to connect using a smartphone, go to the Shadowsocks’ <a href="https://shadowsocks.org/en/config/quick-guide.html#qrcode" target="_blank" rel="nofollow noopener noreferrer">QR generator</a>&nbsp;and fill your config details in the following format:</p>
+<pre>ss://method:password@hostname:port</pre>
+<p>Replace the <tt>hostname</tt> with your server’s public IP if you are using the IPs instead of a domain name. For example:</p>
+<pre>ss://chacha20-ietf-poly1305:your-secure-password@95.123.198.234:443</pre>
+<p>Then import the generated URI or QR code on your device using the client software. Select the imported profile and activate the connection. And finally, configure your system to use the proxy.</p>
+<p>In mobile devices like iOS and Android, the connection can serve as a full VPN.</p>
+<h3>Configuring another Linux host</h3>
+<p>Connecting using the Shadowsock-libev as a client can be done by configuring the proxy in localhost mode. Once installed, create <tt>local-config.json</tt> file as underneath.</p>
+<p>Set the file to include the server IP address and port as you configured on the proxy server. Also, include local address and port like shown below. Lastly, set the password and encryption method to match your Shadowsocks proxy server.</p>
+<pre>sudo nano /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/local-config.json</pre>
+<pre>{
+    "server":"95.123.198.234",
+    "server_port":443,
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "password":"your-secure-password",
+    "timeout":60,
+    "method":"chacha20-ietf-poly1305"
+}</pre>
+<p>Next, create a systemd unit file for the Shadowsocks client and edit it to have the following content.</p>
+<pre>sudo nano /etc/systemd/system/shadowsocks-libev-local@.service</pre>
+<pre>[Unit]
+Description=Shadowsocks-Libev Local Service for %I
+Documentation=man:ss-local(1)
+After=network-online.target
+    
+[Service]
+Type=simple
+ExecStart=/usr/bin/snap run shadowsocks-libev.ss-local -c /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/%i.json
+    
+[Install]
+WantedBy=multi-user.target</pre>
+<p>Once done, save the file and exit the editor.</p>
+<p>Then start the client proxy using the following command. Note that the <tt>@config</tt> is used to select the configuration file, e.g. <tt>config.json</tt> but without the file format.</p>
+<pre>sudo systemctl start shadowsocks-libev-local@local-config</pre>
+<p>The local proxy creates a connection to your cloud server and allows data to pass through them. To actually have application data to use the proxy, you’ll need to configure your web browser or operating system to use the local proxy. The actual process depends on your use case but by our configuration, the proxy is running on the IP 127.0.0.1 and port 1080.</p>
+<h3>Testing the connection</h3>
+<p>Once you are connected, check that your traffic is running through the proxy. For example, open the following URL to test the IP address you are connecting from as seen by others on the Internet.</p>
+<pre><a href="https://ifconfig.me/" target="_blank" rel="nofollow noopener noreferrer">https://ifconfig.me</a></pre>
+<p>Alternatively, you can test it directly by using <tt>curl</tt> in the terminal:</p>
+<pre>curl --proxy socks5://127.0.0.1:1080 https://ifconfig.me</pre>
+<p>Or by starting Google Chrome with the following command-line option:</p>
+<pre>google-chrome --proxy-server="socks5://127.0.0.1:1080"</pre>
+<p>You should then see your connection details listing the IP address of your cloud server instead of the IP of your client device.</p>
+<p>Note that using a VPN connection to your cloud server does not guarantee anonymity and any network traffic must comply with <a href="https://upcloud.com/terms-of-service/" target="_blank" rel="nofollow noopener noreferrer">UpCloud Terms of Service and Acceptable Use Policy</a>.</p>
+<p></p>
+</div>
+<div id="point-6" data-magellan-target="point-6" class="tutorial-block">
+<h2>Making further optimisations</h2>
+<p></p><p>You should now have a fully functional proxy securing your connection to your cloud server. You may not need any additional optimisations, but in the off-chance that you are having a less than ideal experience, the following tweaks might help.</p>
+<h3>Increasing open file descriptors</h3>
+<p>Check the current values by running:</p>
+<pre>ulimit -aH</pre>
+<p>If <tt>open files</tt> parameter shows less than <tt>51200</tt>, do the following:<br>
+Open the <tt>limits.conf</tt> file in a text editor.</p>
+<pre>sudo nano /etc/security/limits.conf</pre>
+<p>Then add the following lines just before the <tt># End of file</tt>:</p>
+<pre>* soft nofile 51200
+* hard nofile 51200</pre>
+<p>Alternatively, use the following if the proxy server is running as root:</p>
+<pre>root soft nofile 51200
+root hard nofile 51200</pre>
+<p>Afterwards, save the file and exit the editor.</p>
+<h3>Tuning the kernel parameters</h3>
+<p>Depending on the performance of your proxy server, you may wish to make the following changes to your system configuration:</p>
+<pre>sudo nano /etc/sysctl.conf</pre>
+<p>Add the following lines to the end of the file:</p>
+<pre>fs.file-max = 51200
+net.core.netdev_max_backlog = 250000
+net.core.somaxconn = 4096
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 0
+net.ipv4.tcp_fin_timeout = 30
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.ip_local_port_range = 10000 65000
+net.core.netdev_max_backlog = 4096
+net.ipv4.tcp_max_syn_backlog = 8192
+net.ipv4.tcp_max_tw_buckets = 5000
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_mtu_probing = 1
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
+net.ipv4.tcp_mem = 25600 51200 102400
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864</pre>
+<p>Then save the file and run the command below to reload the settings.</p>
+<pre>sudo sysctl -p</pre>
+<h3>Using TCP BBR</h3>
+<p>TCP BBR is a TCP congestion control algorithm developed by Google and its been reported to improve performance on certain networks. You can enable it by adding the following to lines to your system configuration file.</p>
+<pre>sudo nano /etc/sysctl.conf</pre>
+<pre>net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr</pre>
+<p>Then save the file and reload the settings.</p>
+<pre>sudo sysctl -p</pre>
+<p>Check the changes by running the next command.</p>
+<pre>sudo sysctl net.ipv4.tcp_congestion_control</pre>
+<p>If the output is as follows the setting was applied successfully.</p>
+<pre>net.ipv4.tcp_congestion_control = bbr</pre>
+<p>These optimisations should help alleviate any possible performance issues.</p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="author-block">
+<div class="author-image">
+<a href="https://upcloud.com/blog/author/zachariah-george/" rel="author">
+<img alt="" src="https://secure.gravatar.com/avatar/e71c862c596d3e6d8457ff67a5aeb5d9?s=60&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e71c862c596d3e6d8457ff67a5aeb5d9?s=120&amp;d=mm&amp;r=g 2x" class="avatar avatar-60 photo" height="60" width="60" loading="lazy"> </a>
+</div>
+<div class="author-name">
+<a href="https://upcloud.com/blog/author/zachariah-george/" rel="author">
+Zachariah George </a>
+</div>
+<div class="clearfix"></div>
+<div class="author-description">
+</div>
+</div>
+</article>
+<div class="share-post">
+<h3>Share this tutorial</h3>
+<ul class="menu">
+<li><a href="https://twitter.com/share?url=https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/&amp;text=How%20to%20install%20Shadowsocks-libev%20SOCKS5%20proxy%20server%20&amp;hashtags=upcloud" title="Twitter share" target="_blank"><img src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/twitter-red.svg" alt="">Twitter</a></li>
+<li><a href="https://www.facebook.com/sharer.php?u=https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/" title="Facebook share" target="_blank"><img src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/fb-red.svg" alt="">Facebook</a></li>
+</ul>
+</div>
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+17 thoughts on “<span>How to install Shadowsocks-libev SOCKS5 proxy server</span>” </h2>
+<ol class="comment-list">
+<li id="comment-99858" class="comment even thread-even depth-1 parent">
+<article id="div-comment-99858" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/651e83f4504307883bbb692ab914ab7e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/651e83f4504307883bbb692ab914ab7e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">JoeRodge</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-99858"><time datetime="2020-09-01T10:22:23+03:00">2020-09-01 at 10:22</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>How does this compare to something like Wireguard or Openvpn, are they comparable? they are using different technologies, correct? Does either have an advantage over the other?</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-99858" data-commentid="99858" data-postid="16324" data-belowelement="div-comment-99858" data-respondelement="respond" data-replyto="Reply to JoeRodge" aria-label="Reply to JoeRodge">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-99964" class="comment byuser comment-author-raiou odd alt depth-2">
+<article id="div-comment-99964" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-99964"><time datetime="2020-09-01T17:45:57+03:00">2020-09-01 at 17:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi there, thanks for the question. A basic proxy just routes the connection via the proxy server without added security. Shadowsocks takes this a step further and encrypts the data using the selected cipher and password which makes is somewhat comparable to a VPN. The difference is, while VPN commonly routes all network traffic depending on the destination, a proxy can be configured to only apply to certain applications, e.g. a web browser.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-99964" data-commentid="99964" data-postid="16324" data-belowelement="div-comment-99964" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-100910" class="comment even thread-odd thread-alt depth-1 parent">
+<article id="div-comment-100910" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/44b61fb6802d94e42dd1f44a36431a68?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/44b61fb6802d94e42dd1f44a36431a68?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">liwog</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-100910"><time datetime="2020-09-06T12:06:06+03:00">2020-09-06 at 12:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hello! How to install Shadowsocks-libev SOCKS5 proxy server This is very good, I like it very much. I don’t know if there is any video, thank you!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-100910" data-commentid="100910" data-postid="16324" data-belowelement="div-comment-100910" data-respondelement="respond" data-replyto="Reply to liwog" aria-label="Reply to liwog">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-100982" class="comment byuser comment-author-raiou odd alt depth-2 parent">
+<article id="div-comment-100982" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-100982"><time datetime="2020-09-07T13:08:56+03:00">2020-09-07 at 13:08</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi there, thanks for the comment, glad to hear you liked the tutorial. Although we haven’t made a video tutorial on Shadowsocks-libev, there are a few available on the topic on the common video-sharing platforms.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-100982" data-commentid="100982" data-postid="16324" data-belowelement="div-comment-100982" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-101179" class="comment even depth-3">
+<article id="div-comment-101179" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+ <img alt="" src="https://secure.gravatar.com/avatar/44b61fb6802d94e42dd1f44a36431a68?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/44b61fb6802d94e42dd1f44a36431a68?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">liwog</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-101179"><time datetime="2020-09-09T05:50:28+03:00">2020-09-09 at 05:50</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hello! Is there some Shadowsocks-libev address on the common video sharing platform? I can’t find it, please help. Thank you!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-101179" data-commentid="101179" data-postid="16324" data-belowelement="div-comment-101179" data-respondelement="respond" data-replyto="Reply to liwog" aria-label="Reply to liwog">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="comment-109864" class="comment odd alt thread-even depth-1 parent">
+<article id="div-comment-109864" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/1021dd17c849bb1e1502fb2c92c9d455?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/1021dd17c849bb1e1502fb2c92c9d455?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Zi</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-109864"><time datetime="2020-10-17T11:13:21+03:00">2020-10-17 at 11:13</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Thanks you very much for your efforts. I am very new to Linux and have no ideas how to set up shadowsocks server at all. What you posted has helped me a lot. However, I wonder if the service is automatically run every time I turn on my PC? If yes, how to stop it? And do I have to configure my modem or router? I used WIFI connection between my desktop and the router, do I have to use cable instead?</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-109864" data-commentid="109864" data-postid="16324" data-belowelement="div-comment-109864" data-respondelement="respond" data-replyto="Reply to Zi" aria-label="Reply to Zi">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-110458" class="comment byuser comment-author-raiou even depth-2">
+<article id="div-comment-110458" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-110458"><time datetime="2020-10-19T12:41:54+03:00">2020-10-19 at 12:41</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi there, thanks for the question. The instructions set the Shadowsocks server to start automatically but the clients are left for manual start/stop. Running the proxy doesn’t require any setup on the network side so you should be good to go.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-110458" data-commentid="110458" data-postid="16324" data-belowelement="div-comment-110458" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-115752" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-115752" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/2e95301270afd452678c8c6ee0197cbe?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/2e95301270afd452678c8c6ee0197cbe?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Trynn</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-115752"><time datetime="2020-11-08T10:05:37+02:00">2020-11-08 at 10:05</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>The service didnt start on my client..failed with result exit code. I am on a fedora 33 any idea why?</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-115752" data-commentid="115752" data-postid="16324" data-belowelement="div-comment-115752" data-respondelement="respond" data-replyto="Reply to Trynn" aria-label="Reply to Trynn">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-116082" class="comment byuser comment-author-raiou even depth-2 parent">
+<article id="div-comment-116082" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-116082"><time datetime="2020-11-09T11:45:36+02:00">2020-11-09 at 11:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi Trynn, thanks for the question. It’s likely that the service file as defined in the example here doesn’t work as-is on your system. Have a look at the service status to see if there’s any indication as to why it failed to start. </p>
+<pre>systemctl status shadowsocks-libev-server@config</pre>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-116082" data-commentid="116082" data-postid="16324" data-belowelement="div-comment-116082" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-116335" class="comment odd alt depth-3 parent">
+<article id="div-comment-116335" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/2e95301270afd452678c8c6ee0197cbe?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/2e95301270afd452678c8c6ee0197cbe?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Trynn</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-116335"><time datetime="2020-11-10T09:08:41+02:00">2020-11-10 at 09:08</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Thanks so much great guide. I managed to make it work!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-116335" data-commentid="116335" data-postid="16324" data-belowelement="div-comment-116335" data-respondelement="respond" data-replyto="Reply to Trynn" aria-label="Reply to Trynn">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-129033" class="comment even depth-4">
+<article id="div-comment-129033" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/97b740f2a43e7d50d62e2bec3b886ef4?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/97b740f2a43e7d50d62e2bec3b886ef4?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn"><a href="https://www.shadowsocksph.space/" rel="external nofollow ugc" class="url">carlo</a></b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-129033"><time datetime="2021-01-03T18:45:58+02:00">2021-01-03 at 18:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>thank you</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-129033" data-commentid="129033" data-postid="16324" data-belowelement="div-comment-129033" data-respondelement="respond" data-replyto="Reply to carlo" aria-label="Reply to carlo">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-134303" class="comment odd alt depth-3 parent">
+<article id="div-comment-134303" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/76727bf454cb5cf41ef9906087388d72?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/76727bf454cb5cf41ef9906087388d72?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn"><a href="http://armanmu.com/" rel="external nofollow ugc" class="url">Arman</a></b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-134303"><time datetime="2021-01-25T04:12:56+02:00">2021-01-25 at 04:12</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>It seems we need to install snap core in order for for the service to work.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-134303" data-commentid="134303" data-postid="16324" data-belowelement="div-comment-134303" data-respondelement="respond" data-replyto="Reply to Arman" aria-label="Reply to Arman">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-134397" class="comment byuser comment-author-raiou even depth-4">
+<article id="div-comment-134397" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-134397"><time datetime="2021-01-25T15:08:08+02:00">2021-01-25 at 15:08</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi Arman, thanks for the comment. Snap core is the runtime environment for snapd and indeed required for installing snap packages. If you do not wish to use Snap, you can find instructions on <a href="https://github.com/shadowsocks/shadowsocks-libev#build-deb-package-from-source" rel="nofollow ugc">how to install Shadowsocks-libev from the source</a> at their GitHub page.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-134397" data-commentid="134397" data-postid="16324" data-belowelement="div-comment-134397" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="comment-136065" class="comment odd alt thread-even depth-1 parent">
+<article id="div-comment-136065" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/0536e1e319b39d2fac3b5c9fcba4ca81?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/0536e1e319b39d2fac3b5c9fcba4ca81?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Gio</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-136065"><time datetime="2021-02-01T08:31:18+02:00">2021-02-01 at 08:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi, thanks for the tutorial.</p>
+<p>Initializing the process seem to fail to bind to port 443 – any ideas how to fix? already tried setcap ‘cap_net_bind_service=+ep’ /usr/bin/snap and didnt work.</p>
+<p>root@mia:~# /usr/bin/snap run shadowsocks-libev.ss-server -c /var/snap/shadowsocks-libev/common/etc/shadowsocks-libev/config.json<br>
+2021-02-01 01:29:44 INFO: UDP relay enabled<br>
+2021-02-01 01:29:44 INFO: initializing ciphers… chacha20-ietf-poly1305<br>
+2021-02-01 01:29:44 INFO: using nameserver: 1.1.1.1<br>
+2021-02-01 01:29:44 INFO: tcp server listening at [::0]:443<br>
+2021-02-01 01:29:44 ERROR: listen(): Operation not permitted<br>
+2021-02-01 01:29:44 INFO: tcp server listening at 0.0.0.0:443<br>
+2021-02-01 01:29:44 ERROR: listen(): Operation not permitted<br>
+2021-02-01 01:29:44 ERROR: failed to listen on any address</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-136065" data-commentid="136065" data-postid="16324" data-belowelement="div-comment-136065" data-respondelement="respond" data-replyto="Reply to Gio" aria-label="Reply to Gio">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-136092" class="comment byuser comment-author-raiou even depth-2">
+<article id="div-comment-136092" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-136092"><time datetime="2021-02-01T11:00:37+02:00">2021-02-01 at 11:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi Gio, thanks for the comment. The error indicates that Shadowsock wasn’t able to bind the port 443 which could be caused by the port already being used by another process. You can try checking what’s using the port 443 and if you can stop it using </p>
+<pre>sudo lsof -i -P -n | grep LISTEN</pre>
+<p>Alternatively, just use a different port with Shadowsocks by editing your config.json file.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-136092" data-commentid="136092" data-postid="16324" data-belowelement="div-comment-136092" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-137448" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-137448" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/c7bcffe09fb00f71a1ba51ec62c8c191?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/c7bcffe09fb00f71a1ba51ec62c8c191?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Alejandro</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-137448"><time datetime="2021-02-05T15:33:20+02:00">2021-02-05 at 15:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi<br>
+how can i use setup this proxy server for using telegram in app socks5 proxy?</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-137448" data-commentid="137448" data-postid="16324" data-belowelement="div-comment-137448" data-respondelement="respond" data-replyto="Reply to Alejandro" aria-label="Reply to Alejandro">Reply</a></div> </article>
+<ol class="children">
+<li id="comment-137799" class="comment byuser comment-author-raiou even depth-2">
+<article id="div-comment-137799" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt="" src="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17c20703fc4aadcfeb278b3d56134b3f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy"> <b class="fn">Janne Ruostemaa</b> <span class="says">says:</span> </div>
+<div class="comment-metadata">
+<a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-137799"><time datetime="2021-02-06T12:48:13+02:00">2021-02-06 at 12:48</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi Alejandro, thanks for the question. Telegram doesn’t seem to support Shadowsocks directly but you can use the Shadowsocks mobile client to connect to the proxy as instructed in the tutorial and then set your Telegram proxy to connect to 127.0.0.1:1080 without username or password.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#comment-137799" data-commentid="137799" data-postid="16324" data-belowelement="div-comment-137799" data-respondelement="respond" data-replyto="Reply to Janne Ruostemaa" aria-label="Reply to Janne Ruostemaa">Reply</a></div> </article>
+</li>
+</ol>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://upcloud.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate=""><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required" placeholder="Click here to leave a comment"></textarea></p><p class="comment-form-author"> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required="required"><label for="author">Name <span class="required">*</span></label></p>
+<p class="comment-form-email"> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required="required"><label for="email">Email <span class="required">*</span></label></p>
+<p class="comment-form-url"> <input id="url" name="url" type="url" value="" size="30" maxlength="200"><label for="url">Website</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="16324" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="d2b3ceed1a"></p><textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea><input type="hidden" id="ak_js" name="ak_js" value="1622387625910"></form> </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="locations">
+<div class="grid-x">
+<div class="mobile-title">
+<h2>Locations</h2>
+</div>
+<div class="large-8 cell">
+<ul class="tabs" data-responsive-accordion-tabs="tabs medium-accordion small-accordion large-tabs" data-allow-all-closed="true" id="location-tabs" role="tablist" data-e="haswl4-e">
+<li class="tabs-title is-active" role="presentation"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#helsinki-hq" aria-selected="true" role="tab" aria-controls="helsinki-hq" id="helsinki-hq-label" tabindex="0">Helsinki (HQ)</a></li>
+<li class="tabs-title " role="presentation"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#london" aria-selected="false" role="tab" aria-controls="london" id="london-label" tabindex="-1">London</a></li>
+<li class="tabs-title " role="presentation"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#singapore" aria-selected="false" role="tab" aria-controls="singapore" id="singapore-label" tabindex="-1">Singapore</a></li>
+<li class="tabs-title " role="presentation"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#seattle" aria-selected="false" role="tab" aria-controls="seattle" id="seattle-label" tabindex="-1">Seattle</a></li>
+</ul>
+</div>
+<div class="large-4 cell">
+</div>
+<div class="large-12 cell">
+<div class="tabs-content location-tabs" data-tabs-content="location-tabs">
+<div class="tabs-panel is-active" id="helsinki-hq" role="tabpanel" aria-labelledby="helsinki-hq-label">
+<div class="grid-x">
+<div class="large-8 cell">
+<div class="content-wrap">
+<div class="grid-x">
+<div class="large-6 cell">
+<div class="location-info-wrap">
+<h3>Helsinki (HQ)</h3>
+<p>In the capital city of Finland, you will find our headquarters, and our first data centre. This is where we handle most of our development and innovation.</p>
+</div>
+</div>
+<div class="large-6 cell">
+<h3>Email</h3>
+<p>
+<span class="small-label">General</span><a href="mailto:hello@upcloud.com">hello@upcloud.com</a><br>
+<span class="small-label">Sales</span><a href="mailto:sales@upcloud.com">sales@upcloud.com</a><br>
+<span class="small-label">Support</span><a href="mailto:support@upcloud.com">support@upcloud.com</a><br>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="large-4 cell">
+<div class="image-wrap" style="background-image:url(&#39;https://upcloud.com/wp-content/uploads/2018/11/helsinki.jpg&#39;);"></div>
+</div>
+</div>
+</div>
+<div class="tabs-panel " id="london" role="tabpanel" aria-labelledby="london-label" aria-hidden="true">
+<div class="grid-x">
+<div class="large-8 cell">
+<div class="content-wrap">
+<div class="grid-x">
+<div class="large-6 cell">
+<div class="location-info-wrap">
+<h3>London</h3>
+<p>London was our second office to open, and a important step in introducing UpCloud to the world. Here our amazing staff can help you with both sales and support, in addition to host tons of interesting meetups.</p>
+</div>
+</div>
+<div class="large-6 cell">
+<h3>Email</h3>
+<p>
+<span class="small-label">General</span><a href="mailto:hello@upcloud.com">hello@upcloud.com</a><br>
+<span class="small-label">Sales</span><a href="mailto:sales@upcloud.com">sales@upcloud.com</a><br>
+<span class="small-label">Support</span><a href="mailto:support@upcloud.com">support@upcloud.com</a><br>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="large-4 cell">
+<div class="image-wrap" style="background-image:url(&#39;https://upcloud.com/wp-content/uploads/2018/11/helsinki.jpg&#39;);"></div>
+</div>
+</div>
+</div>
+<div class="tabs-panel " id="singapore" role="tabpanel" aria-labelledby="singapore-label" aria-hidden="true">
+<div class="grid-x">
+<div class="large-8 cell">
+<div class="content-wrap">
+<div class="grid-x">
+<div class="large-6 cell">
+<div class="location-info-wrap">
+<h3>Singapore</h3>
+<p>Singapore was our 3rd office to be opened, and enjoys one of most engaged and fastest growing user bases we have ever seen.</p>
+</div>
+</div>
+<div class="large-6 cell">
+<h3>Email</h3>
+<p>
+<span class="small-label">General</span><a href="mailto:hello@upcloud.com">hello@upcloud.com</a><br>
+<span class="small-label">Sales</span><a href="mailto:sales@upcloud.com">sales@upcloud.com</a><br>
+ <span class="small-label">Support</span><a href="mailto:support@upcloud.com">support@upcloud.com</a><br>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="large-4 cell">
+<div class="image-wrap" style="background-image:url(&#39;https://upcloud.com/wp-content/uploads/2018/10/singapore.jpg&#39;);"></div>
+</div>
+</div>
+</div>
+<div class="tabs-panel " id="seattle" role="tabpanel" aria-labelledby="seattle-label" aria-hidden="true">
+<div class="grid-x">
+<div class="large-8 cell">
+<div class="content-wrap">
+<div class="grid-x">
+<div class="large-6 cell">
+<div class="location-info-wrap">
+<h3>Seattle</h3>
+<p>Seattle is our 4th and latest office to be opened, and our way to reach out across the pond to our many users in the Americas.</p>
+</div>
+</div>
+<div class="large-6 cell">
+<h3>Email</h3>
+<p>
+<span class="small-label">General</span><a href="mailto:hello@upcloud.com">hello@upcloud.com</a><br>
+<span class="small-label">Sales</span><a href="mailto:sales@upcloud.com">sales@upcloud.com</a><br>
+<span class="small-label">Support</span><a href="mailto:support@upcloud.com">support@upcloud.com</a><br>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="large-4 cell">
+<div class="image-wrap" style="background-image:url(&#39;https://upcloud.com/wp-content/uploads/2018/11/helsinki.jpg&#39;);"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="l-site-footer">
+<nav class="l-site-footer__navigation">
+<div class="l-site-footer__navigation__container">
+<ul id="menu-footer-navigation" class="c-footer-menu"><li id="menu-item-17734" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-17734"><a href="https://upcloud.com/products/">Products</a>
+<ul class="sub-menu">
+<li id="menu-item-17735" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17735"><a href="https://upcloud.com/products/cloud-servers/">Cloud Servers</a></li>
+<li id="menu-item-17736" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17736"><a href="https://upcloud.com/products/maxiops-storage/">MaxIOPS storage</a></li>
+<li id="menu-item-17836" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17836"><a href="https://upcloud.com/products/object-storage/">Object Storage</a></li>
+<li id="menu-item-17737" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17737"><a href="https://upcloud.com/products/backup/">Simple Backup</a></li>
+<li id="menu-item-17738" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17738"><a href="https://upcloud.com/products/software-defined-networking/">SDN Private Networks</a></li>
+<li id="menu-item-19193" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19193"><a href="https://upcloud.com/products/network-transfer-pool/">Network Transfer Pool</a></li>
+<li id="menu-item-17739" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17739"><a href="https://upcloud.com/products/private-cloud/">Private Cloud</a></li>
+</ul>
+</li>
+<li id="menu-item-17731" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-17731"><a href="https://upcloud.com/compare/">Compare</a>
+<ul class="sub-menu">
+<li id="menu-item-17732" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17732"><a href="https://upcloud.com/compare/aws-ec2/">AWS EC2</a></li>
+<li id="menu-item-17741" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17741"><a href="https://upcloud.com/compare/azure/">Microsoft Azure</a></li>
+<li id="menu-item-17742" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17742"><a href="https://upcloud.com/compare/digitalocean/">DigitalOcean</a></li>
+<li id="menu-item-17743" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17743"><a href="https://upcloud.com/compare/linode/">Linode</a></li>
+<li id="menu-item-17744" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17744"><a href="https://upcloud.com/compare/vultr/">Vultr</a></li>
+</ul>
+</li>
+<li id="menu-item-17733" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-17733"><a href="https://upcloud.com/community/">Community</a>
+<ul class="sub-menu">
+<li id="menu-item-17751" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17751"><a href="https://upcloud.com/community/">Overview</a></li>
+<li id="menu-item-17752" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17752"><a href="https://upcloud.com/community/stories/">Use cases</a></li>
+<li id="menu-item-17753" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17753"><a href="https://upcloud.com/community/events/">Events</a></li>
+<li id="menu-item-18506" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-18506"><a href="https://upcloud.com/sign-up-newsletter/">Newsletter</a></li>
+</ul>
+</li>
+<li id="menu-item-17750" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-17750"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Resources</a>
+<ul class="sub-menu">
+<li id="menu-item-17746" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17746"><a href="https://upcloud.com/community/resources/">Resources</a></li>
+<li id="menu-item-17745" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17745"><a href="https://upcloud.com/community/tutorials/">Tutorials</a></li>
+<li id="menu-item-17747" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17747"><a href="https://upcloud.com/docs/">Documentation</a></li>
+<li id="menu-item-17749" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17749"><a href="https://developers.upcloud.com/1.3/">API</a></li>
+<li id="menu-item-19194" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-19194"><a href="https://status.upcloud.com/">Status page</a></li>
+<li id="menu-item-17748" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17748"><a href="https://upcloud.com/faq/">FAQ</a></li>
+</ul>
+</li>
+<li id="menu-item-17730" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-17730"><a href="https://upcloud.com/community/tutorials/install-shadowsocks-libev-socks5-proxy/#">Company</a>
+<ul class="sub-menu">
+<li id="menu-item-17726" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17726"><a href="https://upcloud.com/about/">About UpCloud</a></li>
+<li id="menu-item-17740" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-17740"><a href="https://upcloud.com/blog/">Blog &amp; News</a></li>
+<li id="menu-item-17729" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17729"><a href="https://upcloud.com/partners/">Partners</a></li>
+<li id="menu-item-17728" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17728"><a href="https://upcloud.com/careers/">Careers</a></li>
+<li id="menu-item-19672" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-19672"><a href="https://upcloud.com/media-centre/">Media Centre</a></li>
+<li id="menu-item-17755" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17755"><a href="https://upcloud.com/brand-assets/">Brand assets</a></li>
+<li id="menu-item-20026" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20026"><a href="https://upcloud.com/contact/">Contact us</a></li>
+</ul>
+</li>
+</ul> </div>
+</nav>
+<div class="l-site-footer__extra">
+<div class="l-site-footer__extra__container">
+<div class="l-site-footer__logo">
+<a href="https://upcloud.com/" title="UpCloud">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 63.7 32" style="enable-background:new 0 0 63.7 32;" xml:space="preserve">
+<g id="_x36_.-Navigation-_x26_-Footer-renewal">
+<g id="Navigation---Desktop---PRODUCTS-hover" transform="translate(-26.000000, -61.000000)">
+<g id="upcloud-logo-white-01" transform="translate(26.000000, 61.000000)">
+<path id="Shape" class="st0" d="M108.7,7.5c-2.7,0-4.6,1.1-6,3h-0.1V7.9h-2.9V32h2.9v-8h0.1c1.5,1.9,3.3,2.7,5.9,2.7
+				c5.1,0,8.1-3.7,8.1-9.6C116.7,11,113.4,7.5,108.7,7.5z M108.4,24.3c-4.3,0-5.9-3.2-5.9-7.2s1.9-7.2,6-7.2c3.5,0,5.3,3.1,5.3,7.2
+				C113.7,21.2,112,24.3,108.4,24.3z"></path>
+<path id="Path_1_" class="st0" d="M117.8,13.4c0-7.5,4.6-13.4,12.5-13.4c6.1,0,9.9,3.4,10.6,8.2h-3.2c-0.6-3.2-3.2-5.4-7.4-5.4
+				c-5.8,0-9,4.5-9,10.6c0,6.3,3.6,10.5,9.1,10.5c5,0,7.3-3.3,7.6-7.1h3.3c0,2.5-1.3,5.4-3.2,7.2c-1.8,1.8-4.5,2.7-7.9,2.7
+				C122.6,26.7,117.8,21.1,117.8,13.4L117.8,13.4z"></path>
+<rect id="Rectangle" x="145.4" class="st0" width="3.2" height="25.6"></rect>
+<path id="Shape_1_" class="st0" d="M159.7,7.5c-5.6,0-9,4.3-9,9.6c0,5.3,3.5,9.6,9,9.6c5.6,0,9-4.3,9-9.6S165.3,7.5,159.7,7.5z
+				 M159.7,24.3c-4,0-6-3.2-6-7.2s2.1-7.2,6-7.2s6,3.2,6,7.2C165.7,21.1,163.7,24.3,159.7,24.3z"></path>
+<path id="Path_2_" class="st0" d="M184.9,26.2v-2.6h-0.1c-1.3,1.8-2.9,3-5.6,3c-3.8,0-6.3-2.3-6.3-6.2v-13h2.9v12.9
+				c0,2.4,1.5,3.9,4.2,3.9c3,0,4.9-2.2,4.9-5.2V7.5h2.9v18.8L184.9,26.2L184.9,26.2z"></path>
+<path id="Shape_2_" class="st0" d="M205.1,1.1v9.5H205c-1.3-1.9-3.5-3-5.8-3c-4.6,0-8.2,3.5-8.2,9.5c0,5.8,3.2,9.5,8.2,9.5
+				c2.6,0,4.4-1,5.8-2.7h0.1v2.2h2.9V1.1H205.1z M199.4,24.3c-3.6,0-5.4-3-5.4-7.1c0-4.1,1.8-7.2,5.3-7.2c3.9,0,6,2.9,6,7.2
+				C205.3,21.3,203.5,24.3,199.4,24.3z"></path>
+<path id="Path_3_" class="st1" d="M58.6,16.8c2.8,0,5.1,2.2,5.1,4.9s-2.3,4.9-5.1,4.9H22.3V13.9h2.4v10.5h34
+				c1.5,0,2.7-1.2,2.7-2.6s-1.2-2.6-2.7-2.6H27v-2.3H58.6L58.6,16.8z"></path>
+<path id="Path_4_" class="st1" d="M36.3,1.1H23.4v5.5h2.4V3.5h10.5c1.5,0,2.7,1.2,2.7,2.7s-1.2,2.7-2.7,2.7H5.1
+				C2.3,8.9,0,11.2,0,14.1s2.3,5.1,5.1,5.1h16v-2.4h-16c-1.5,0-2.7-1.2-2.7-2.7s1.2-2.7,2.7-2.7h31.2c2.8,0,5.1-2.3,5.1-5.1
+				S39.1,1.1,36.3,1.1L36.3,1.1z"></path>
+</g>
+</g>
+</g>
+</svg>
+</a>
+</div>
+<div class="l-site-footer__text">
+<p>UpCloud Ltd © 2021. All rights reserved.</p>
+<div class="l-site-footer__text__links">
+<a href="https://upcloud.com/terms-of-service/">Terms of service</a>
+<a href="https://upcloud.com/privacy-policy/">Privacy policy</a>
+</div>
+</div>
+<div class="l-site-footer__social-media">
+<a href="https://www.facebook.com/UpCloudLtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M6.023 16L6 9H3V6h3V4c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V6H13l-1 3H9.28v7H6.023z"></path></svg>
+</a>
+<a href="https://twitter.com/upcloud">
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path class="cls-1" d="M16,3a5.92,5.92,0,0,1-1.9.5,2.83,2.83,0,0,0,1.4-1.8,6.56,6.56,0,0,1-2.1.8,3.49,3.49,0,0,0-2.4-1A3.31,3.31,0,0,0,7.8,4.8a1.48,1.48,0,0,0,.1.7A9.2,9.2,0,0,1,1.1,2.1,3.06,3.06,0,0,0,.7,3.8,3.28,3.28,0,0,0,2.2,6.5,4.19,4.19,0,0,1,.7,6.1,3.23,3.23,0,0,0,3.3,9.3a2.77,2.77,0,0,1-.9.1,1.27,1.27,0,0,1-.6-.1,3.24,3.24,0,0,0,3.1,2.3A6.36,6.36,0,0,1,.8,13H0a9.76,9.76,0,0,0,5,1.5,9.26,9.26,0,0,0,9.3-9.3V4.8A5.81,5.81,0,0,0,16,3Z"></path></svg>
+</a>
+<a href="https://github.com/UpCloudLtd">
+<svg height="16" width="16" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+</a>
+<a href="https://www.linkedin.com/company/upcloud/">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M15.3 0H.7C.3 0 0 .3 0 .7v14.7c0 .3.3.6.7.6h14.7c.4 0 .7-.3.7-.7V.7c-.1-.4-.4-.7-.8-.7zM4.7 13.6H2.4V6h2.4v7.6zM3.6 5c-.8 0-1.4-.7-1.4-1.4 0-.8.6-1.4 1.4-1.4.8 0 1.4.6 1.4 1.4-.1.7-.7 1.4-1.4 1.4zm10 8.6h-2.4V9.9c0-.9 0-2-1.2-2s-1.4 1-1.4 2v3.8H6.2V6h2.3v1c.3-.6 1.1-1.2 2.2-1.2 2.4 0 2.8 1.6 2.8 3.6v4.2z"></path></svg>
+</a>
+<a href="https://www.instagram.com/upcloud/">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g><circle cx="12.145" cy="3.892" r=".96"></circle><path data-color="color-2" d="M8 12c-2.206 0-4-1.794-4-4s1.794-4 4-4 4 1.794 4 4-1.794 4-4 4zm0-6c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z"></path><path d="M12 16H4c-2.056 0-4-1.944-4-4V4c0-2.056 1.944-4 4-4h8c2.056 0 4 1.944 4 4v8c0 2.056-1.944 4-4 4zM4 2c-.935 0-2 1.065-2 2v8c0 .953 1.047 2 2 2h8c.935 0 2-1.065 2-2V4c0-.935-1.065-2-2-2H4z"></path></g></svg>
+</a>
+<a href="https://www.youtube.com/channel/UCkIkxF5pBTBLYgYHXDIUUuw">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M15.8 4.8c-.2-1.3-.8-2.2-2.2-2.4C11.4 2 8 2 8 2s-3.4 0-5.6.4C1 2.6.3 3.5.2 4.8 0 6.1 0 8 0 8s0 1.9.2 3.2c.2 1.3.8 2.2 2.2 2.4C4.6 14 8 14 8 14s3.4 0 5.6-.4c1.4-.3 2-1.1 2.2-2.4C16 9.9 16 8 16 8s0-1.9-.2-3.2zM6 11V5l5 3-5 3z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div> 
+
+<script type="text/javascript">
+var sbiajaxurl = "https://upcloud.com/wp-admin/admin-ajax.php";
+</script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/navigation.js.下载" id="upcloud-navigation-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/skip-link-focus-fix.js.下载" id="upcloud-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/comment-reply.min.js.下载" id="comment-reply-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/jquery.js.下载" id="main-jquery-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/what-input.js.下载" id="what-input-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/foundation.min.js.下载" id="foundation-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/slick.min.js.下载" id="slick-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/rellax.min.js.下载" id="rellax-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/tweenmax.min.js.下载" id="tweenmax-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/aos.js.下载" id="aos-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/highlight.min.js.下载" id="highlight-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/svg.min.js.下载" id="svg-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/tooltipster.bundle.min.js.下载" id="tooltipster-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/tooltipster-svg.min.js.下载" id="tooltipster-svg-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/masonry.pkgd.min.js.下载" id="masonry-pkgd-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/jquery.sticky.min.js.下载" id="sticky-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/jquery.validate.min.js.下载" id="jquery-validate-js"></script>
+<script type="text/javascript" id="loadmore-js-extra">
+/* <![CDATA[ */
+var postsParams = {"ajaxurl":"https:\/\/upcloud.com\/wp-admin\/admin-ajax.php","posts":"{\"page\":0,\"post_type\":\"tutorials\",\"tutorials\":\"install-shadowsocks-libev-socks5-proxy\",\"name\":\"install-shadowsocks-libev-socks5-proxy\",\"error\":\"\",\"m\":\"\",\"p\":0,\"post_parent\":\"\",\"subpost\":\"\",\"subpost_id\":\"\",\"attachment\":\"\",\"attachment_id\":0,\"pagename\":\"\",\"page_id\":0,\"second\":\"\",\"minute\":\"\",\"hour\":\"\",\"day\":0,\"monthnum\":0,\"year\":0,\"w\":0,\"category_name\":\"\",\"tag\":\"\",\"cat\":\"\",\"tag_id\":\"\",\"author\":\"\",\"author_name\":\"\",\"feed\":\"\",\"tb\":\"\",\"paged\":0,\"meta_key\":\"\",\"meta_value\":\"\",\"preview\":\"\",\"s\":\"\",\"sentence\":\"\",\"title\":\"\",\"fields\":\"\",\"menu_order\":\"\",\"embed\":\"\",\"category__in\":[],\"category__not_in\":[],\"category__and\":[],\"post__in\":[],\"post__not_in\":[],\"post_name__in\":[],\"tag__in\":[],\"tag__not_in\":[],\"tag__and\":[],\"tag_slug__in\":[],\"tag_slug__and\":[],\"post_parent__in\":[],\"post_parent__not_in\":[],\"author__in\":[],\"author__not_in\":[],\"ignore_sticky_posts\":false,\"suppress_filters\":false,\"cache_results\":true,\"update_post_term_cache\":true,\"lazy_load_term_meta\":true,\"update_post_meta_cache\":true,\"posts_per_page\":11,\"nopaging\":false,\"comments_per_page\":\"50\",\"no_found_rows\":false,\"order\":\"DESC\"}","current_page":"1","max_page":"0","taxonomy":"tutorials_category"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/loader.js.下载" id="loadmore-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/app.js.下载" id="app-js-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/legacy.js.下载" id="legacy-js-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/single-tutorials.js.下载" id="single-tutorials-js"></script>
+<script type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/wp-embed.min.js.下载" id="wp-embed-js"></script>
+<script async="async" type="text/javascript" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/form.js.下载" id="akismet-form-js"></script>
+
+
+</div><svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1002"></defs><polyline id="SvgjsPolyline1003" points="0,0"></polyline><path id="SvgjsPath1004" d="M0 0 "></path></svg><div style="display: none; visibility: hidden;">
+<script>!function(b,e,f,g,a,c,d){b.fbq||(a=b.fbq=function(){a.callMethod?a.callMethod.apply(a,arguments):a.queue.push(arguments)},b._fbq||(b._fbq=a),a.push=a,a.loaded=!0,a.version="2.0",a.queue=[],c=e.createElement(f),c.async=!0,c.src=g,d=e.getElementsByTagName(f)[0],d.parentNode.insertBefore(c,d))}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","1764061803863673");fbq("track","PageView");</script>
+<noscript></noscript>
+
+</div><div style="display: none; visibility: hidden;"><script>var APP_ID="plv17rv3";window.intercomSettings={app_id:APP_ID};</script>
+<script>var startIntercom=function(){var b=window,a=b.Intercom;if("function"===typeof a)a("reattach_activator"),a("update",b.intercomSettings);else{var d=document,c=function(){c.c(arguments)};c.q=[];c.c=function(a){c.q.push(a)};b.Intercom=c;a=function(){var a=d.createElement("script");a.type="text/javascript";a.async=!0;a.src="https://widget.intercom.io/widget/"+APP_ID;var b=d.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)};"complete"===document.readyState?a():b.attachEvent?b.attachEvent("onload",
+a):b.addEventListener("load",a,!1)}};setTimeout(startIntercom,3E3);</script></div><div style="display: none; visibility: hidden;">
+<script src="https://platform.twitter.com/oct.js" type="text/javascript"></script>
+<script type="text/javascript">twttr.conversion.trackPid("nuxpg",{tw_sale_amount:0,tw_order_quantity:0});</script>
+<noscript></noscript>
+</div><script type="text/javascript" id="">window.addEventListener("message",function(a){"hsFormCallback"===a.data.type&&"onFormSubmitted"===a.data.eventName&&window.dataLayer.push({event:"hubspot-form-success","hs-form-guid":a.data.id})});</script><iframe name="_hjRemoteVarsFrame" title="_hjRemoteVarsFrame" id="_hjRemoteVarsFrame" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/box-21ccaa45726c0f3c8c458f7a87eb2298.html" style="display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;"></iframe><script src="https://analytics.twitter.com/i/adsct?type=javascript&amp;version=1.1.0&amp;p_id=Twitter&amp;p_user_id=0&amp;txn_id=nuxpg&amp;tw_sale_amount=0&amp;tw_order_quantity=0&amp;tw_iframe_status=0&amp;tpx_cb=twttr.conversion.loadPixels&amp;tw_document_href=https%3A%2F%2Fupcloud.com%2Fcommunity%2Ftutorials%2Finstall-shadowsocks-libev-socks5-proxy%2F" type="text/javascript"></script>
+<script type="text/javascript" id="hs-script-loader" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/6435916.js(2).下载"></script>
+<iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/saved_resource.html"></iframe><iframe owner="archetype" title="archetype" style="display: none; visibility: hidden;" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/saved_resource(1).html"></iframe><div id="intercom-container" class="intercom-namespace"><style>html.intercom-mobile-messenger-active,html.intercom-mobile-messenger-active > body,html.intercom-modal-open,#intercom-container-body{overflow:hidden !important;}html.intercom-mobile-messenger-active,html.intercom-mobile-messenger-active > body{position:static !important;}html.intercom-mobile-messenger-active > body{height:0 !important;margin:0 !important;}iframe#intercom-frame{position:absolute !important;opacity:0 !important;width:1px !important;height:1px !important;top:0 !important;left:0 !important;border:none !important;display:block !important;z-index:-1 !important;}</style><div class="intercom-app" aria-live="polite"><iframe allowfullscreen="" class="intercom-launcher-frame intercom-1ak5083 e1ur5zlj0" name="intercom-launcher-frame" title="Intercom live chat" data-intercom-frame="true" src="./Install Shadowsocks-libev SOCKS5 proxy server - Tutorial - UpCloud_files/saved_resource(2).html"></iframe><div id="intercom-modal-container"></div></div></div><div id="intercom-css-container"><style data-emotion="intercom-global"></style><style data-emotion="intercom"></style></div></body></html>

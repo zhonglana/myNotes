@@ -1,0 +1,28 @@
+jQuery(function($){content=$("[data-content]");buttonId="load-more";buttonContent='<div class="grid-container" id="button-grid"><div class="grid-x grid-padding-x"><div class="medium-12 cell load-more-wrap"><a href="#" id="'+buttonId+'" class="button load-more">Load more</a></div></div></div>';content.after(buttonContent);$('li[data-category] a').click(function(e){e.preventDefault();$category=$(this).parent().data('category');posts=JSON.parse(postsParams.posts);if($category==="all")
+{resetCategory();return;}
+if(ajaxAction=="search")
+{s=$('input[name="s"]').val();data={'action':ajaxFilterAction,'post_type':posts.post_type,'slug':$category,'taxonomy':postsParams.taxonomy,'page':0,'s':s}}
+else
+{data={'action':ajaxFilterAction,'post_type':posts.post_type,'slug':$category,'taxonomy':postsParams.taxonomy,'page':0};}
+if($(this).parent().hasClass('active-category'))
+{$(this).parent().removeClass('active-category');resetCategory();return;}
+$.ajax({url:postsParams.ajaxurl,data:data,type:'POST',beforeSend:function(xhr){},success:function(data){if(data){$("#"+buttonId).remove();content.html(data);postsParams.current_page=1;}else{console.log("not found");}},error:function(err){console.log(err);}});$("li[data-category]").removeClass('active-category');$(this).parent().addClass('active-category');});$('#'+buttonId).click(buttonEvent);function resetCategory()
+{if(ajaxAction=="search")
+{s=$('input[name="s"]').val();console.log(s);data={'action':ajaxFilterAction,'page':0,'post_type':posts.post_type,'slug':"",'taxonomy':postsParams.taxonomy,'s':s}}
+else
+{data={'action':ajaxFilterAction,'page':0,'post_type':posts.post_type,'slug':"",'taxonomy':postsParams.taxonomy,};}
+$.ajax({url:postsParams.ajaxurl,data:data,type:'POST',beforeSend:function(xhr){},success:function(data){if(data){content.html(data);if($('#'+buttonId).length==0)
+{$("#button-grid").remove();content.after(buttonContent);$('#'+buttonId).click(buttonEvent);postsParams.current_page=1;}
+if(postsParams.current_page==postsParams.max_page)
+button.remove();}else{button.remove();}}});}
+$('[hidden = "hidden"]').text()=="notfound"?$('#'+buttonId).remove():"";});function buttonEvent(e)
+{e.preventDefault();button=$(this);slug="";activeCategory=$(".active-category");counter=0;if(postsParams.current_page>=postsParams.max_page){button.remove();return;}
+if(activeCategory.length!=0)
+{slug=activeCategory.data('category');if(slug==="all")
+{slug="";}}
+if(ajaxAction=="search")
+{s=$('input[name="s"]').val();data={'action':ajaxAction,'query':postsParams.posts,'page':postsParams.current_page,'slug':slug,'taxonomy':postsParams.taxonomy,'s':s}}
+else
+{data={'action':ajaxAction,'query':postsParams.posts,'page':postsParams.current_page,'slug':slug,'taxonomy':postsParams.taxonomy,};}
+$.ajax({url:postsParams.ajaxurl,data:data,type:'POST',beforeSend:function(xhr){button.text('Loading...');},success:function(data){if(data.trim()){content.append(data);counter++;console.log(counter);button.text('More posts');postsParams.current_page++;if(postsParams.current_page==postsParams.max_page)
+button.remove();}else{button.remove();}}});}
